@@ -2,6 +2,7 @@ from keras import regularizers
 from tensorflow.python.keras.applications.inception_resnet_v2 import InceptionResNetV2
 from tensorflow.python.keras.layers import Dropout, Flatten, Dense
 from tensorflow.python.keras.models import Sequential
+from keras.preprocessing.image import ImageDataGenerator
 from pathlib import Path
 import os, shutil
 
@@ -82,6 +83,12 @@ for f in fnames:
     dst = os.path.join(train_negative_dir, f)
     shutil.copyfile(src, dst)
 
+train_datagen = ImageDataGenerator()
+validation_datagen = ImageDataGenerator()
+
+train_generator = train_datagen.flow_from_directory(train_dir, batch_size=20, class_mode='binary')
+validation_generator = validation_datagen.flow_from_directory(validation_dir, batch_size=20, class_mode='binary')
+
 base = InceptionResNetV2(weights='imagenet', include_top=False, input_shape=(227, 227, 3))
 
 model = Sequential()
@@ -93,3 +100,5 @@ model.add(Dropout(0.5))
 model.add(Dense(1, activation='sigmoid', kernel_regularizer=regularizers.l2(0.001)))
 
 model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
+
+history = model.fit_generator(train_generator, steps_per_epoch=100, epochs=30, validation_data=validation_generator, validation_steps=50)
