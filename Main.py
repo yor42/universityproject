@@ -1,9 +1,11 @@
+
 from keras import regularizers
 from tensorflow.python.keras.applications.inception_resnet_v2 import InceptionResNetV2
 from tensorflow.python.keras.layers import Dropout, Flatten, Dense
 from tensorflow.python.keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 from pathlib import Path
+import random
 import os, shutil
 
 # 폴더가 없으면 폴더를 만듬
@@ -37,6 +39,7 @@ Path(test_positive_dir).mkdir(parents=True, exist_ok=True)
 Path(test_negative_dir).mkdir(parents=True, exist_ok=True)
 
 fnames = os.listdir(dataset_positive)
+random.shuffle(fnames)
 
 if len(os.listdir(validation_positive_dir)) < 1000:
     for i, f in enumerate(fnames):
@@ -54,6 +57,7 @@ if len(os.listdir(validation_positive_dir)) < 1000:
             shutil.copyfile(src, dst)
 
 fnames = os.listdir(dataset_negative)
+random.shuffle(fnames)
 
 if len(os.listdir(validation_negative_dir)) < 1000:
     for i, f in enumerate(fnames):
