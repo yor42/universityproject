@@ -10,6 +10,7 @@ import random
 import os, shutil
 import efficientnet.keras as efn
 import tensorflow as tf
+import webbrowser
 
 config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -136,3 +137,4 @@ plt.title('Training, Validation Accuracy')
 plt.xlabel('Epoches')
 plt.ylabel('Accuracy')
 plt.show()
+webbrowser.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
